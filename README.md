@@ -1,11 +1,21 @@
-# cmake-multiplatform-template
-Tiny CMake template repository used for various C/CPP projects
+### Task
 
-> Based on the [course example](https://github.com/CityAplons/webinar-cicd/tree/main) and [some more advanced project](https://github.com/vdamewood/silikego)
+Спроектировать простейший графический векторный редактор. Подготовить макеты классов,
+отражающих структуру будущего проекта.
+Функционал для макетирования следующий:
 
-### Motivation
+- создание нового документа
+- импорт документа из файла
+- экспорт документа в файл
+- создание графического примитива
+- удаление графического примитива
 
-The ability to create copy-pasted projects for the Advanced-CPP course and personal pet-repos.
+Основной упор сделать на шаблон контроллера (MVC) и полиморфизм. Функции, являющиеся
+обработчиками GUI, собрать в одном файле с функцией `main`.
+Внимание должно быть сосредоточено на декларациях, реализация только в крайнем случае для
+минимальной демонстрации необходимых вызовов. Проект должен компилироваться, все
+заголовки должны пройти стадию компиляции.
+Задание считается выполненным успешно, если все файл
 
 ### Building
 
@@ -14,5 +24,3 @@ mkdir -p build && cd build/
 cmake -DCMAKE_BUILD_TYPE=Release ../
 cmake --build .
 ```
-
-You may add a `-DMAKE_PACKAGE=<OFF|ON>` to disable or enable packages of a project (it's enabled by default).
