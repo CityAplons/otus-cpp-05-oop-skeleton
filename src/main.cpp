@@ -1,43 +1,54 @@
-#include <iostream>
-
 #include "project.h"
+#include "log.hpp"
+#include "gui.hpp"
 
-namespace gui {
+#include <unistd.h>
 
-static void CreateCanvasCallback(void) {
-  std::cout << "Invoking: canvas creation" << std::endl;
+static otus_gfx::Log::Severity GetSeverityFromArgs(int argc, char* const argv[], otus_gfx::Log::Severity previous)
+{
+  int opt, parsed;
+  otus_gfx::Log::Severity set = previous;
+  while ((opt = getopt(argc, argv, "d:")) != -1)
+  {
+    switch (opt)
+    {
+      case 'd':
+        parsed = std::atoi(optarg);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  if (parsed <= otus_gfx::Log::Severity::DEBUG && parsed >= otus_gfx::Log::Severity::ERROR)
+  {
+    set = static_cast<otus_gfx::Log::Severity>(parsed);
+  }
+
+  return set;
 }
 
-static void OpenFromFileCallback(void) {
-  std::cout << "Invoking: load canvas from a file" << std::endl;
-}
+int main(int argc, char* const argv[])
+{
+  using namespace otus_gfx;
 
-static void SaveToFileCallback(void) {
-  std::cout << "Invoking: save canvas to a file" << std::endl;
-}
-
-static void CreatePolygonCallback(void) {
-  std::cout << "Invoking: create polygon" << std::endl;
-}
-
-static void RemovePolygonCallback(void) {
-  std::cout << "Invoking: delete polygon" << std::endl;
-}
-
-}  // namespace gui
-
-int main(int argc, char const *argv[]) {
   struct ProjectInfo info = {};
+  auto& logger = Log::Get();
 
-  std::cout << info.nameString << "\t" << info.versionString << '\n';
+  auto severityDefault = Log::Severity::DEBUG;
+  severityDefault = GetSeverityFromArgs(argc, argv, severityDefault);
 
-  gui::CreateCanvasCallback();
-  gui::OpenFromFileCallback();
-  gui::SaveToFileCallback();
-  gui::CreatePolygonCallback();
-  gui::RemovePolygonCallback();
+  logger.SetSeverity(severityDefault);
+  logger.Debug("{}\t{}", info.nameString, info.versionString);
 
-  (void)argc;
-  (void)argv;
+  Window gui(logger);
+
+  gui.CreateCanvasCallback();
+  gui.OpenFromFileCallback();
+  gui.SaveToFileCallback();
+  gui.CreatePolygonCallback();
+  gui.RemovePolygonCallback();
+
   return 0;
 }

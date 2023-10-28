@@ -8,7 +8,7 @@ project(gfx_editor
     LANGUAGES CXX
 )
 
-set_property(GLOBAL PROPERTY G_CXX_STANDARD 14)
+set_property(GLOBAL PROPERTY G_CXX_STANDARD 20)
 set_property(GLOBAL PROPERTY G_CXX_STANDARD_REQUIRED ON)
 
 # Include utility functions
