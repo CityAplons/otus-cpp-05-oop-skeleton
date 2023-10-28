@@ -1,6 +1,7 @@
 #pragma once
 
-#include <file.hpp>
+#include "file.hpp"
+#include "log.hpp"
 
 namespace otus_gfx {
 
@@ -12,9 +13,5 @@ class Canvas {
   Canvas(/* args */);
   ~Canvas();
 };
-
-Canvas::Canvas(/* args */) {}
-
-Canvas::~Canvas() {}
 
 }  // namespace otus_gfx

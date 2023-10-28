@@ -1,5 +1,7 @@
 #include "project.h"
 #include "log.hpp"
+#include "file.hpp"
+#include "canvas.hpp"
 
 using namespace otus_gfx;
 
@@ -21,11 +23,15 @@ public:
   void CreateCanvasCallback(void)
   {
     logger_.Debug("[{}] canvas creation", __PRETTY_FUNCTION__);
+
+    Canvas blank();
   }
 
   void OpenFromFileCallback(void)
   {
     logger_.Debug("[{}] load canvas from a file", __PRETTY_FUNCTION__);
+
+    File savedCanvas("test.canvas");
   }
 
   void SaveToFileCallback(void)
