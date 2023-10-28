@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+#include <unistd.h> // POSIX specific
+
 namespace otus_gfx
 {
 
@@ -30,9 +32,9 @@ public:
   }
 
   template <typename... Args>
-  static void PrintRaw(std::string_view fmt, Args&&... args)
+  static std::string UnfoldFormat(std::string_view fmt, Args&&... args)
   {
-    std::cout << std::vformat(fmt, std::make_format_args(args...));
+    return std::vformat(fmt, std::make_format_args(args...));
   }
 
   template <typename... Args>
@@ -41,9 +43,7 @@ public:
     if (level_ < Severity::DEBUG)
       return;
 
-    std::cout << "[DEBUG] ";
-    PrintRaw(fmt, args...);
-    std::cout << "\n";
+    std::cout << "[DEBUG]" << UnfoldFormat(fmt, args...) << "\n";
   }
 
   template <typename... Args>
@@ -52,9 +52,7 @@ public:
     if (level_ < Severity::INFO)
       return;
 
-    std::cout << "[INFO] ";
-    PrintRaw(fmt, args...);
-    std::cout << "\n";
+    std::cout << "[INFO]" << UnfoldFormat(fmt, args...) << "\n";
   }
 
   template <typename... Args>
@@ -63,17 +61,38 @@ public:
     if (level_ < Severity::WARN)
       return;
 
-    std::cout << "[WARN] ";
-    PrintRaw(fmt, args...);
-    std::cout << "\n";
+    std::cout << "[WARN]" << UnfoldFormat(fmt, args...) << "\n";
   }
 
   template <typename... Args>
   void Error(std::string_view fmt, Args&&... args) noexcept
   {
-    std::cout << "[ERROR] ";
-    PrintRaw(fmt, args...);
-    std::cout << "\n";
+    std::cout << "[ERROR]" << UnfoldFormat(fmt, args...) << "\n";
+  }
+
+  bool SetSeverityFromArgs(int argc, char* const argv[])
+  {
+    int opt, parsed;
+    while ((opt = getopt(argc, argv, "d:")) != -1)
+    {
+      switch (opt)
+      {
+        case 'd':
+          parsed = std::atoi(optarg);
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    if (parsed <= otus_gfx::Log::Severity::DEBUG && parsed >= otus_gfx::Log::Severity::ERROR)
+    {
+      level_ = static_cast<otus_gfx::Log::Severity>(parsed);
+      return true;
+    }
+
+    return false;
   }
 
 private:

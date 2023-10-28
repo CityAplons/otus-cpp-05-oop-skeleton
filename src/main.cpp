@@ -1,45 +1,59 @@
 #include "project.h"
 #include "log.hpp"
-#include "gui.hpp"
 
-#include <unistd.h>
+using namespace otus_gfx;
 
-static otus_gfx::Log::Severity GetSeverityFromArgs(int argc, char* const argv[], otus_gfx::Log::Severity previous)
+class Window
 {
-  int opt, parsed;
-  otus_gfx::Log::Severity set = previous;
-  while ((opt = getopt(argc, argv, "d:")) != -1)
-  {
-    switch (opt)
-    {
-      case 'd':
-        parsed = std::atoi(optarg);
-        break;
+private:
+  Log& logger_;
 
-      default:
-        break;
-    }
+public:
+  Window(Log& logger) : logger_(logger)
+  {
+    logger_.Info("[Window] created");
+  };
+  ~Window()
+  {
+    logger_.Info("[Window] deleted");
+  };
+
+  void CreateCanvasCallback(void)
+  {
+    logger_.Debug("[{}] canvas creation", __PRETTY_FUNCTION__);
   }
 
-  if (parsed <= otus_gfx::Log::Severity::DEBUG && parsed >= otus_gfx::Log::Severity::ERROR)
+  void OpenFromFileCallback(void)
   {
-    set = static_cast<otus_gfx::Log::Severity>(parsed);
+    logger_.Debug("[{}] load canvas from a file", __PRETTY_FUNCTION__);
   }
 
-  return set;
-}
+  void SaveToFileCallback(void)
+  {
+    logger_.Debug("[{}] save canvas to a file", __PRETTY_FUNCTION__);
+  }
+
+  void CreatePolygonCallback(void)
+  {
+    logger_.Debug("[{}] create polygon", __PRETTY_FUNCTION__);
+  }
+
+  void RemovePolygonCallback(void)
+  {
+    logger_.Debug("[{}] delete polygon", __PRETTY_FUNCTION__);
+  }
+};
 
 int main(int argc, char* const argv[])
 {
-  using namespace otus_gfx;
-
   struct ProjectInfo info = {};
   auto& logger = Log::Get();
 
-  auto severityDefault = Log::Severity::DEBUG;
-  severityDefault = GetSeverityFromArgs(argc, argv, severityDefault);
+  if (!logger.SetSeverityFromArgs(argc, argv))
+  {
+    logger.SetSeverity(Log::Severity::DEBUG);
+  }
 
-  logger.SetSeverity(severityDefault);
   logger.Debug("{}\t{}", info.nameString, info.versionString);
 
   Window gui(logger);
