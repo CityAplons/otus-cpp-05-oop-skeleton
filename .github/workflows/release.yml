@@ -25,6 +25,8 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CC:   gcc-13
+          CXX:  g++-13
         with:
           tag_name: ${{ github.run_number }}
           release_name: Release ${{ github.run_number }}
