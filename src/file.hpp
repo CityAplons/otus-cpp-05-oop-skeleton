@@ -14,12 +14,12 @@ class File
 public:
   File(const char* path) : logger_(Log::Get()), path_(path)
   {
-    logger_.Debug("[File] {} opened", path_);
+    logger_.Info("[File] {} opened", path_);
     // file_.open(path_, std::ios::binary | std::ios::in | std::ios::out);
   };
   ~File()
   {
-    logger_.Debug("[File] {} closed", path_);
+    logger_.Info("[File] {} closed", path_);
     // file_.close();
   };
 
