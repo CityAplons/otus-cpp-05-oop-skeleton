@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['projectinfo_14',['ProjectInfo',['../structProjectInfo.html',1,'']]]
+  ['canvas_70',['Canvas',['../classotus__gfx_1_1Canvas.html',1,'otus_gfx']]]
 ];
